@@ -1,4 +1,5 @@
 #clipboard {
+  flex: 1;
   background-color: #f0e6ff;
   padding: 15px;
 }

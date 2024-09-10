@@ -51,68 +51,86 @@ const toggleSettingsButton = document.getElementById("toggle-settings");
 toggleSettingsButton.addEventListener("click", () => {
   const isHidden = settingsContainer.style.display === "none";
   settingsContainer.style.display = isHidden ? "flex" : "none";
+  quickDraftContainer.style.display = "none"; // Hide quick draft when showing settings
+});
+
+// Quick Draft Toggle
+const quickDraftContainer = document.getElementById("quick-draft");
+const toggleQuickDraftButton = document.getElementById("toggle-quick-draft");
+
+toggleQuickDraftButton.addEventListener("click", () => {
+  const isHidden = quickDraftContainer.style.display === "none";
+  quickDraftContainer.style.display = isHidden ? "block" : "none";
+  settingsContainer.style.display = "none"; // Hide settings when showing quick draft
 });
 
 async function updateClipboardPreview() {
-  const clipboardPreview = document.getElementById("clipboard-preview");
-  clipboardPreview.innerHTML = ""; // Clear previous content
+  const imagePreview = document.getElementById("image-preview");
+  const urlPreview = document.getElementById("url-preview");
+  const textPreview = document.getElementById("text-preview");
+  const emptyClipboard = document.getElementById("empty-clipboard");
+
+  // Hide all previews initially
+  imagePreview.style.display = "none";
+  urlPreview.style.display = "none";
+  textPreview.style.display = "none";
+  emptyClipboard.style.display = "none";
 
   // Check for image content
   const image = clipboard.readImage();
   if (!image.isEmpty()) {
-    const imgElement = document.createElement("img");
-    imgElement.src = image.toDataURL();
-    imgElement.style.maxWidth = "100%";
-    imgElement.style.maxHeight = "200px";
-    clipboardPreview.appendChild(imgElement);
+    const previewImage = document.getElementById("preview-image");
+    const imageDataUrl = image.toDataURL();
+    previewImage.src = imageDataUrl;
+    previewImage.style.maxWidth = "100%";
+    previewImage.style.maxHeight = "400px";
+
+    const size = image.getSize();
+    document.getElementById("image-resolution").textContent = `${size.width}x${size.height}`;
+    
+    // Calculate image size in KB
+    const imageSizeInBytes = atob(imageDataUrl.split(',')[1]).length;
+    const imageSizeInKB = Math.round(imageSizeInBytes / 1024);
+    document.getElementById("image-size").textContent = `${imageSizeInKB} KB`;
+    
+    // Determine image type
+    const imageType = imageDataUrl.split(';')[0].split('/')[1];
+    document.getElementById("image-type").textContent = imageType.toUpperCase();
+
+    imagePreview.style.display = "block";
   } else {
     // Check for text content
     const text = clipboard.readText().trim();
     if (text) {
-      const isUrl =
-        /^(https?:\/\/)?([\w\-]+(\.[\w\-]+)+\.?(:\d+)?(\/\S*)?|\w+:\/\/\S+)$/.test(
-          text
-        );
+      const isUrl = /^(https?:\/\/)?([\w\-]+(\.[\w\-]+)+\.?(:\d+)?(\/\S*)?|\w+:\/\/\S+)$/.test(text);
       if (isUrl) {
-        const linkElement = document.createElement("a");
-        linkElement.href = text.startsWith("http") ? text : `https://${text}`;
-        linkElement.textContent = text;
-        linkElement.target = "_blank";
-        clipboardPreview.appendChild(linkElement);
+        const fullUrl = text.startsWith("http") ? text : `https://${text}`;
+        document.getElementById("url-link").href = fullUrl;
+        document.getElementById("url-link").textContent = text;
 
         // Fetch and display URL preview
         try {
-          const preview = await getUrlPreview(linkElement.href);
-          const previewElement = document.createElement("div");
-          previewElement.innerHTML = `
-            ${
-              preview.iconUrl
-                ? `<img src="${preview.iconUrl}" alt="Site icon" height="32">`
-                : ""
-            }
-            <h3>${preview.title}</h3>
-            <p>${preview.description}</p>
-          `;
-          clipboardPreview.appendChild(previewElement);
+          const preview = await getUrlPreview(fullUrl);
+          document.getElementById("url-icon").src = preview.iconUrl || "";
+          document.getElementById("url-title").textContent = preview.title;
+          document.getElementById("url-description").textContent = preview.description;
+          urlPreview.style.display = "block";
         } catch (error) {
           console.error("Failed to fetch URL preview:", error);
+          textPreview.style.display = "block";
+          document.getElementById("text-content").textContent = text;
         }
       } else {
-        const textElement = document.createElement("p");
-        textElement.textContent =
-          text.slice(0, 200) + (text.length > 200 ? "..." : "");
-        clipboardPreview.appendChild(textElement);
+        textPreview.style.display = "block";
+        document.getElementById("text-content").textContent = text.length > 200 ? text.slice(0, 200) + "..." : text;
       }
     } else {
-      clipboardPreview.textContent =
-        "Clipboard is empty or contains unsupported content.";
+      emptyClipboard.style.display = "block";
     }
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  updateClipboardPreview();
-});
+document.addEventListener("DOMContentLoaded", updateClipboardPreview);
 
 // Add this to update clipboard preview when the window gains focus
 window.addEventListener("focus", updateClipboardPreview);
@@ -165,26 +183,26 @@ async function getUrlPreview(url) {
 }
 
 // Get the "View drafts" button element
-const viewDraftsButton = document.getElementById("view-drafts");
+const viewDraftsButton = document.getElementById('view-drafts');
 
 // Add click event listener to the button
-viewDraftsButton.addEventListener("click", async () => {
+viewDraftsButton.addEventListener('click', async () => {
   try {
     // Get the site URL from the stored credentials
     const credentials = await ipcRenderer.invoke("get-credentials");
-
+    
     if (credentials && credentials.siteUrl) {
       // Construct the URL for viewing drafts
       const draftsUrl = `${credentials.siteUrl}/wp-admin/edit.php?post_status=draft&post_type=post`;
-
+      
       // Open the URL in the default browser
       await ipcRenderer.invoke("open-external", draftsUrl);
     } else {
-      console.error("Site URL not found in credentials");
-      alert("Please set up your WordPress site in the settings first.");
+      console.error('Site URL not found in credentials');
+      alert('Please set up your WordPress site in the settings first.');
     }
   } catch (error) {
-    console.error("Error opening drafts page:", error);
-    alert("An error occurred while trying to open the drafts page.");
+    console.error('Error opening drafts page:', error);
+    alert('An error occurred while trying to open the drafts page.');
   }
 });

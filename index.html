@@ -54,6 +54,7 @@
       <h1>PressThat</h1>
       <div id="header-actions">
         <button id="view-drafts">View drafts</button>
+        <button id="toggle-quick-draft">Quick Draft</button>
         <button id="toggle-settings">Settings</button>
       </div>
     </header>
@@ -95,14 +96,7 @@
         <button type="submit">Test and save</button>
       </form>
 
-      <div id="clipboard">
-        <h2>Clipboard</h2>
-        <p>Make a draft with the contents of your clipboard.</p>
-        <div id="clipboard-preview"></div>
-        <button id="save-clipboard">Save as Draft</button>
-      </div>
-
-      <div id="quick-draft">
+      <div id="quick-draft" style="display: none">
         <h2>Quick Draft</h2>
         <p>Get your ideas out of your head and into your drafts.</p>
         <form id="quick-draft-form">
@@ -119,6 +113,44 @@
           ></textarea>
           <button type="submit">Create Draft</button>
         </form>
+      </div>
+
+      <div id="clipboard">
+        <h2>Clipboard</h2>
+        <p>Make a draft with the contents of your clipboard.</p>
+        <div id="clipboard-preview">
+          <!-- Image preview template -->
+          <div id="image-preview" style="display: none">
+            <img id="preview-image" src="" alt="Image preview" />
+            <dl>
+              <dt>Resolution</dt>
+              <dd id="image-resolution"></dd>
+              <dt>Size</dt>
+              <dd id="image-size"></dd>
+              <dt>Type</dt>
+              <dd id="image-type"></dd>
+            </dl>
+          </div>
+
+          <!-- URL preview template -->
+          <div id="url-preview" style="display: none">
+            <img id="url-icon" src="" alt="Site icon" height="48" width="48" />
+            <h3 id="url-title"></h3>
+            <p id="url-description"></p>
+            <a id="url-link" href="" target="_blank"></a>
+          </div>
+
+          <!-- Text preview template -->
+          <div id="text-preview" style="display: none">
+            <p id="text-content"></p>
+          </div>
+
+          <!-- Empty clipboard message -->
+          <p id="empty-clipboard" style="display: none">
+            Clipboard is empty or contains unsupported content.
+          </p>
+        </div>
+        <button id="save-clipboard">PressThis!</button>
       </div>
     </main>
     <script src="renderer.js"></script>
