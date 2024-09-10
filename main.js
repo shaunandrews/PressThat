@@ -1,4 +1,10 @@
-const { app, BrowserWindow, ipcMain, shell } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  shell,
+  globalShortcut,
+} = require("electron");
 const path = require("path");
 const { menubar } = require("menubar");
 const WordPress = require("./wordpress");
@@ -24,6 +30,17 @@ const mb = menubar({
 
 mb.on("ready", () => {
   console.log("PressThat is ready!");
+
+  // Register global shortcut
+  const shortcut =
+    process.platform === "darwin" ? "Command+Shift+P" : "Ctrl+Shift+P";
+  globalShortcut.register(shortcut, () => {
+    if (mb.window && mb.window.isVisible()) {
+      mb.hideWindow();
+    } else {
+      mb.showWindow();
+    }
+  });
 });
 
 ipcMain.handle(
@@ -50,4 +67,9 @@ app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
   }
+});
+
+app.on("will-quit", () => {
+  // Unregister the global shortcut when the app is about to quit
+  globalShortcut.unregisterAll();
 });
