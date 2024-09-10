@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PressThat</title>
+    <link rel="stylesheet" href="css/settings.css" />
+    <link rel="stylesheet" href="css/clipboard.css" />
+    <link rel="stylesheet" href="css/quick-draft.css" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+          "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+          "Noto Color Emoji";
+        font-size: 16px;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      body > header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+      }
+
+      body > main {
+        flex: 1;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      h1 {
+        color: #333;
+        font-size: 18px;
+      }
+
+      h2 {
+        font-size: 13px;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>PressThat</h1>
+      <div id="header-actions">
+        <button id="view-drafts">View drafts</button>
+        <button id="toggle-settings">Settings</button>
+      </div>
+    </header>
+    <main>
+      <form id="settings">
+        <div class="settings-group">
+          <label for="site-url">WordPress Site URL</label>
+          <input
+            type="text"
+            id="site-url"
+            placeholder="https://your-wordpress-site.com"
+            required
+          />
+          <p>The place you go to sign in to your WordPress site.</p>
+        </div>
+        <div class="settings-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="Your WordPress username"
+            required
+          />
+          <p>The username you use to sign in to your WordPress site.</p>
+        </div>
+        <div class="settings-group">
+          <label for="password">Application Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="xxxx xxxx xxxx xxxx xxxx xxxx"
+            required
+          />
+          <p>
+            You can generate an Application Password in your WordPress dashboard
+            under Users -> Profile.
+          </p>
+        </div>
+        <button type="submit">Test and save</button>
+      </form>
+
+      <div id="clipboard">
+        <h2>Clipboard</h2>
+        <p>Make a draft with the contents of your clipboard.</p>
+        <div id="clipboard-preview"></div>
+        <button id="save-clipboard">Save as Draft</button>
+      </div>
+
+      <div id="quick-draft">
+        <h2>Quick Draft</h2>
+        <p>Get your ideas out of your head and into your drafts.</p>
+        <form id="quick-draft-form">
+          <input
+            type="text"
+            id="draft-title"
+            placeholder="Quick draft"
+            required
+          />
+          <textarea
+            id="draft-content"
+            placeholder="Quick draft content..."
+            required
+          ></textarea>
+          <button type="submit">Create Draft</button>
+        </form>
+      </div>
+    </main>
+    <script src="renderer.js"></script>
+  </body>
+</html>

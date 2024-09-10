@@ -1,0 +1,17 @@
+This project is called PressThat.
+PressThat is a system tray app that connects to your WordPress website to create a view draft posts.
+
+After first installing the app, you need to configure it with your website details. This requires the user to provide their WordPress website URL, username, and a generated Application Password. Users can generate an Application Password in their WordPress dashboard at the bottom of the "Users -> Profile" page. This password is unique and can be easily revoked at any time.
+
+Here's a quick flow for how the new user experience (NUX) will work:
+
+1. The user downloads, installs, and opens the app.
+2. The app does an initial check to see if the user has previously configured the app. (For users who have previously configured the app, the app will skip the welcome screen and go straight to step 4.)
+3. The welcome screen is shown asking for the website URL, username, and Application Password. This screen can also explain how the app works, and how to generate an Application Password.
+4. The app tests the connection details and shows a message if the connection failed.
+5. Upon successful connection an initial sync of (up to 20) drafts is performed. This stores the title, date, featured image, and excerpt for each draft.
+6. A new menu bar (on MacOS, status bar on Windows, system tray on Linux) icon appears. The icon is a stylized "P" with a subscript number indicating the number of draft posts.
+7. Clicking the icon show's the main app interface, which resemebles a cross between a deck of cards and a spreadsheet. The app uses a combination of cards and tables to display the draft posts, with the most recent posts appearing at the top of the deck.
+
+
+facebook.com
