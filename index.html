@@ -111,7 +111,6 @@
             placeholder="Quick draft content..."
             required
           ></textarea>
-          <button type="submit">Create Draft</button>
         </form>
       </div>
 
@@ -138,6 +137,7 @@
             <h3 id="url-title"></h3>
             <p id="url-description"></p>
             <a id="url-link" href="" target="_blank"></a>
+            <iframe id="url-embed" src="" frameborder="0"></iframe>
           </div>
 
           <!-- Text preview template -->
@@ -150,9 +150,11 @@
             Clipboard is empty or contains unsupported content.
           </p>
         </div>
-        <button id="save-clipboard">PressThis!</button>
       </div>
     </main>
+    <footer>
+      <button>PressThis!</button>
+    </footer>
     <script src="renderer.js"></script>
   </body>
 </html>
