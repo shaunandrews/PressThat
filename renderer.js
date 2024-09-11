@@ -54,16 +54,6 @@ toggleSettingsButton.addEventListener("click", () => {
   quickDraftContainer.style.display = "none"; // Hide quick draft when showing settings
 });
 
-// Quick Draft Toggle
-const quickDraftContainer = document.getElementById("quick-draft");
-const toggleQuickDraftButton = document.getElementById("toggle-quick-draft");
-
-toggleQuickDraftButton.addEventListener("click", () => {
-  const isHidden = quickDraftContainer.style.display === "none";
-  quickDraftContainer.style.display = isHidden ? "block" : "none";
-  settingsContainer.style.display = "none"; // Hide settings when showing quick draft
-});
-
 async function updateClipboardPreview() {
   const imagePreview = document.getElementById("image-preview");
   const urlPreview = document.getElementById("url-preview");

@@ -21,10 +21,8 @@ const mb = menubar({
   browserWindow: {
     width: 400,
     height: 500,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-    },
+    frame: false,
+    transparent: true,
   },
 });
 

@@ -3,7 +3,6 @@
   flex-direction: column;
   gap: 15px;
   padding: 15px;
-  background: #efefef;
 }
 
 .settings-group {
@@ -19,11 +18,9 @@
 
 .settings-group input {
   padding: 5px;
-  border: 1px solid #ccc;
   border-radius: 5px;
 }
 
 .settings-group p {
   font-size: 13px;
-  color: #666;
 }
